@@ -30,8 +30,13 @@ namespace BillSplitter
             context = new ApplicationDbContext();
             employeesService = new EmployeesService(context);
             var employees = employeesService.GetAll();
-            for (int i = 0; i < employees.Count; i++)
+            for (int i = 0; i <= (employees.Count); i++)
             {
+                if (employees.Count == i)
+                {
+                    UserDic.Add("Total", new List<float> { 0, 0, 0 });
+                    break;
+                }
                 ListNames.Items.Add(employees[i].Name);
                 ChListBoxNames.Items.Add(employees[i].Name);
                 UserDic.Add(employees[i].Name, new List<float> { 0, 0, 0 });
@@ -96,7 +101,13 @@ namespace BillSplitter
         {
             foreach (string user in UserDic.Keys)
             {
+                UserDic["Total"][0] += UserDic[user][0];
+                UserDic["Total"][1] += UserDic[user][1];
+                UserDic["Total"][2] += UserDic[user][2];
                 UserDic[user][2] = UserDic[user][1] - UserDic[user][0];
+
+                if (user == "Total")
+                    break;
             }
         }
 
